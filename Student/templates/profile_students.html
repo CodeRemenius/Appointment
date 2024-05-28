@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}View Profile{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">View Profile</h2>
+            <form class="form-floating">
+                <div class="mb-3">
+                    <label for="first_name">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="email">School Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ user.student.phone_number }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{ user.student.department }}" readonly>
+                </div>
+                <div class="text-center">
+                    <a href="{% url 'edit_profile_student' %}" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+<!-- dashboard_student.html -->
+{% extends 'base.html' %}
+{% block title %}Student Dashboard{% endblock %}
+    <style>
+/* Modal styles */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+    {% block content %}
+    <div class="modal-dialog modal-dialog-centered" id="advisorModal">
+        <div class="modal-content">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title">Pick Your Advisor</h5>
+          <form method="post" action="{% url 'save_advisor' %}">
+            {% csrf_token %}
+            <label for="advisor">Advisor:</label><br>
+            <select id="advisor" name="advisor" required>
+              {% for advisor in advisors %}
+                <option value="{{ advisor.id }}">{{ advisor.user.get_full_name }}</option>
+              {% endfor %}
+            </select><br><br>
+            <button type="submit">Save</button>
+          </form>
+        </div>
+      </div>
+      
+
+    <!-- Page content -->
+    
+    <h1>Welcome to Your Dashboard</h1>
+        
+        <!-- Display upcoming appointments -->
+        <h2>Upcoming Appointments</h2>
+        {% if upcoming_appointments %}
+            <ul>
+            {% for appointment in upcoming_appointments %}
+                <li>{{ appointment.topic }} - {{ appointment.start_time }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No upcoming appointments.</p>
+        {% endif %}
+
+        <!-- Display uncompleted tasks -->
+        <h2>Uncompleted Tasks</h2>
+        {% if tasks %}
+            <ul>
+            {% for task in tasks %}
+                <li>{{ task.title }} - Deadline: {{ task.deadline }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No uncompleted tasks.</p>
+        {% endif %}
+
+        <!-- Display appointments awaiting approval -->
+        <h2>Appointments Awaiting Your Approval</h2>
+        {% if awaiting_approval_appointments %}
+            <ul>
+            {% for appointment in awaiting_approval_appointments %}
+                <li>{{ appointment.topic }} - {{ appointment.start_time }}</li>
+                <!-- Add link to view appointment details and approve -->
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No appointments awaiting your approval.</p>
+        {% endif %}
+    </div>
+    {% endblock %}   
+    {% block ModalScript %}
+    <script>
+        // JavaScript for modal
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('advisorModal');
+            var span = document.getElementsByClassName('close')[0];
+            
+            // Show modal if it's supposed to be shown
+            {% if show_modal %}
+            modal.style.display = 'block';
+            {% endif %}
+            
+            // Close modal when clicking on the close button
+            span.onclick = function() {
+                modal.style.display = 'none';
+            };
+            
+            // Close modal when clicking outside the modal
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            };
+            
+            // Hide modal after form submission
+            var form = document.querySelector('#advisorModal form');
+            form.addEventListener('submit', function(event) {
+                modal.style.display = 'none';
+            });
+        });
+    </script>
+    {% endblock %}
+    </body>
+</html>

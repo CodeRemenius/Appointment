@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Select Advisor{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center align-items-center" style="height: 100vh;">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center">Change Your Advisor</h2>
+                    <form method="post" action="{% url 'select_advisor' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="advisor" class="form-label">Select Advisor:</label>
+                            <select class="form-select" id="advisor" name="advisor">
+                                {% for advisor in advisors %}
+                                    <option value="{{ advisor.id }}" {% if advisor.id == current_advisor.id %}selected{% endif %}>{{ advisor.user.get_full_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
